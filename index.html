@@ -3,268 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Mortgage Valuation Tool</title>
+    <title>Valuation Portal</title>
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #0284c7;
-            --bg: #f1f5f9;
+            --bg-color: #f8fafc;
+            --primary-dark: #0f172a;
+            --accent-blue: #0284c7;
             --card-bg: #ffffff;
-            --text: #334155;
-            --border: #cbd5e1;
+            --border-color: #e2e8f0;
+            --text-dark: #334155;
+            --text-muted: #64748b;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 700px;
-            margin: 30px auto;
-            background: var(--card-bg);
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+
+        /* HEADER BAR */
+        .top-navbar {
+            width: 100%;
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 15px 30px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        h1 {
-            font-size: 24px;
-            color: var(--primary);
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        .subtitle {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        .section-title {
-            font-size: 16px;
+
+        .portal-title {
+            font-size: 20px;
             font-weight: 700;
-            color: var(--primary);
-            border-bottom: 2px solid var(--bg);
-            padding-bottom: 5px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-        label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 6px;
+
+        .status-badge {
+            background-color: var(--accent-blue);
             font-size: 13px;
-            color: #475569;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 15px;
-            background-color: #f8fafc;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            background-color: #fff;
-        }
-        button {
-            width: 100%;
-            background-color: var(--accent);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 5px 14px;
+            border-radius: 20px;
             font-weight: 600;
+        }
+
+        /* MAIN CONTAINER */
+        .dashboard-container {
+            max-width: 1000px;
+            width: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* 4-ICON GRID NAVIGATION */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .nav-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px 15px;
+            text-align: center;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
         }
-        button:hover {
-            background-color: #0369a1;
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.1);
         }
-        .results-container {
-            margin-top: 30px;
+
+        .nav-card.active {
+            background-color: #f0f9ff;
+            border-2px: 2px solid var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .icon-visual {
+            font-size: 42px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .icon-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* DYNAMIC MODULE DISPLAY BOX */
+        .workspace-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            min-height: 250px;
+        }
+
+        .panel-view {
             display: none;
         }
-        .result-card {
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
+
+        .panel-view.active {
+            display: block;
         }
-        .bg-market {
-            background-color: #f0fdf4;
-            border: 1px solid #bbf7d0;
-        }
-        .bg-fsv {
-            background-color: #fff7ed;
-            border: 1px solid #fed7aa;
-        }
-        .result-card h3 {
-            margin: 0 0 5px 0;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .bg-market h3 { color: #166534; }
-        .bg-fsv h3 { color: #9a3412; }
-        .price {
-            font-size: 32px;
+
+        .panel-heading {
+            font-size: 22px;
             font-weight: 700;
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 10px;
         }
-        .bg-market .price { color: #15803d; }
-        .bg-fsv .price { color: #c2410c; }
-        .breakdown {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 10px;
-            text-align: left;
-            background: #f8fafc;
+
+        .panel-description {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* PLACEHOLDER LISTS FOR SCANNABILITY */
+        .placeholder-item {
             padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .placeholder-item:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Property Valuation Calculator</h1>
-    <div class="subtitle">Bank Mortgage & Forced Sale Value Appraisal</div>
-    
-    <!-- LAND VALUATION -->
-    <div class="section-title">1. Land Details</div>
-    <div class="grid">
-        <div class="form-group">
-            <label for="landArea">Land Area (Sq. Ft.)</label>
-            <input type="number" id="landArea" value="1500" min="0">
-        </div>
-        <div class="form-group">
-            <label for="landRate">Market Rate (per Sq. Ft.)</label>
-            <input type="number" id="landRate" value="120" min="0">
-        </div>
+    <!-- HEADER BAR -->
+    <div class="top-navbar">
+        <div class="portal-title">🏛️ Valuation Management System</div>
+        <div class="status-badge" id="current-module-badge">Active: Billing</div>
     </div>
 
-    <!-- BUILDING VALUATION -->
-    <div class="section-title">2. Building Structure Details</div>
-    <div class="grid">
-        <div class="form-group">
-            <label for="buildArea">Built-up Area (Total Sq. Ft.)</label>
-            <input type="number" id="buildArea" value="2000" min="0">
-        </div>
-        <div class="form-group">
-            <label for="constRate">Current Construction Rate (per Sq. Ft.)</label>
-            <input type="number" id="constRate" value="75" min="0">
-        </div>
-        <div class="form-group">
-            <label for="buildingAge">Age of Building (Years)</label>
-            <input type="number" id="buildingAge" value="10" min="0">
-        </div>
-        <div class="form-group">
-            <label for="depRate">Annual Depreciation Rate (%)</label>
-            <input type="number" id="depRate" value="2" min="0" max="100" step="0.1">
-        </div>
-    </div>
-
-    <!-- BANK MORTGAGE PARAMETERS -->
-    <div class="section-title">3. Mortgage Risk Factor</div>
-    <div class="form-group full-width">
-        <label for="fsvFactor">Forced Sale Value (FSV) Percentage (%)</label>
-        <select id="fsvFactor">
-            <option value="80" selected>80% (Standard Bank Norm)</option>
-            <option value="75">75% (Conservative)</option>
-            <option value="70">70% (High Risk Property)</option>
-            <option value="90">90% (Premium Property)</option>
-        </select>
-    </div>
-
-    <button onclick="calculateMortgageValuation()">Generate Valuation Report</button>
-
-    <!-- REPORT OUTPUT -->
-    <div id="results" class="results-container">
-        <div class="result-card bg-market">
-            <h3>Fair Market Value (FMV)</h3>
-            <div id="fmvPrice" class="price">$0.00</div>
-        </div>
+    <!-- MAIN CONTAINER -->
+    <div class="dashboard-container">
         
-        <div class="result-card bg-fsv">
-            <h3>Forced Sale Value (FSV)</h3>
-            <div id="fsvPrice" class="price">$0.00</div>
+        <!-- 4-ICON GRID NAVIGATION -->
+        <div class="icon-grid">
+            <!-- Icon 1: Billing -->
+            <div class="nav-card active" onclick="openModule('billing-view', 'Billing', this)">
+                <span class="icon-visual">💳</span>
+                <span class="icon-label">Billing</span>
+            </div>
+
+            <!-- Icon 2: Valuation Report -->
+            <div class="nav-card" onclick="openModule('report-view', 'Valuation Report', this)">
+                <span class="icon-visual">📋</span>
+                <span class="icon-label">Valuation Report</span>
+            </div>
+
+            <!-- Icon 3: Worklist -->
+            <div class="nav-card" onclick="openModule('worklist-view', 'Worklist', this)">
+                <span class="icon-visual">⏱️</span>
+                <span class="icon-label">Worklist</span>
+            </div>
+
+            <!-- Icon 4: Database -->
+            <div class="nav-card" onclick="openModule('database-view', 'Database', this)">
+                <span class="icon-visual">🗄️</span>
+                <span class="icon-label">Database</span>
+            </div>
         </div>
 
-        <div class="breakdown">
-            <strong>Valuation Breakdown:</strong><br>
-            • Total Land Value: <span id="lblLandVal">$0.00</span><br>
-            • Building Replacement Cost (New): <span id="lblBuildNew">$0.00</span><br>
-            • Depreciated Building Value (<span id="lblAge">0</span> yrs): <span id="lblBuildDep">$0.00</span>
+        <!-- DYNAMIC WORKSPACE PANEL -->
+        <div class="workspace-panel">
+            
+            <!-- Module 1 Container: Billing -->
+            <div id="billing-view" class="panel-view active">
+                <div class="panel-heading">Invoicing & Payments</div>
+                <div class="panel-description">Track professional bank mortgage appraisal fees and invoice statuses.</div>
+                <div class="placeholder-item"><span>Invoice #1024 — Standard Bank Appraisal</span><strong>$450.00 (Paid)</strong></div>
+                <div class="placeholder-item"><span>Invoice #1025 — Commercial Site Inspection</span><strong>$1,200.00 (Pending)</strong></div>
+            </div>
+
+            <!-- Module 2 Container: Valuation Report -->
+            <div id="report-view" class="panel-view">
+                <div class="panel-heading">Appraisal Generator</div>
+                <div class="panel-description">Create, finalize, and sign asset evaluation records for mortgage validation.</div>
+                <p style="color:var(--text-muted); font-size:14px;">[Calculator tools can be embedded or opened directly within this section.]</p>
+            </div>
+
+            <!-- Module 3 Container: Worklist -->
+            <div id="worklist-view" class="panel-view">
+                <div class="panel-heading">Pending Inspections</div>
+                <div class="panel-description">Track continuous pipeline properties assigned for physical survey checking.</div>
+                <div class="placeholder-item"><span>📍 742 Evergreen Terrace — Verification Scheduled</span><span style="color:#b45309; font-weight:600;">Due Tomorrow</span></div>
+                <div class="placeholder-item"><span>📍 112 Ocean Avenue — Structural Check Required</span><span style="color:#b45309; font-weight:600;">In 3 Days</span></div>
+            </div>
+
+            <!-- Module 4 Container: Database -->
+            <div id="database-view" class="panel-view">
+                <div class="panel-heading">Archived Calculations Archive</div>
+                <div class="panel-description">Query past values, historic local land index rates, and finished client files.</div>
+                <div class="placeholder-item"><span>Folder: 2025 Bank Submissions Ledger</span><span>312 Records</span></div>
+                <div class="placeholder-item"><span>Folder: Regional Land Benchmark Indices</span><span>Updated 2026</span></div>
+            </div>
+
         </div>
     </div>
-</div>
 
-<script>
-function calculateMortgageValuation() {
-    // 1. Get Land Inputs
-    const landArea = parseFloat(document.getElementById('landArea').value) || 0;
-    const landRate = parseFloat(document.getElementById('landRate').value) || 0;
-    
-    // 2. Get Building Inputs
-    const buildArea = parseFloat(document.getElementById('buildArea').value) || 0;
-    const constRate = parseFloat(document.getElementById('constRate').value) || 0;
-    const buildingAge = parseFloat(document.getElementById('buildingAge').value) || 0;
-    const depRate = parseFloat(document.getElementById('depRate').value) / 100 || 0;
-    
-    // 3. Get Bank Factor
-    const fsvFactor = parseFloat(document.getElementById('fsvFactor').value) / 100;
-
-    // 4. Mathematical Calculations
-    const totalLandValue = landArea * landRate;
-    
-    const buildingCostNew = buildArea * constRate;
-    // Straight-line Depreciation math: Depreciated Value = Cost * (1 - (Age * Rate))
-    let depreciatedBuildingValue = buildingCostNew * (1 - (buildingAge * depRate));
-    if (depreciatedBuildingValue < 0) depreciatedBuildingValue = 0; // Building value cannot drop below zero
-
-    const fairMarketValue = totalLandValue + depreciatedBuildingValue;
-    const forcedSaleValue = fairMarketValue * fsvFactor;
-
-    // 5. Format Currency Display Function
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0
-    });
-
-    // 6. Push calculations to the HTML page
-    document.getElementById('fmvPrice').innerText = formatter.format(fairMarketValue);
-    document.getElementById('fsvPrice').innerText = formatter.format(forcedSaleValue);
-    
-    document.getElementById('lblLandVal').innerText = formatter.format(totalLandValue);
-    document.getElementById('lblBuildNew').innerText = formatter.format(buildingCostNew);
-    document.getElementById('lblBuildDep').innerText = formatter.format(depreciatedBuildingValue);
-    document.getElementById('lblAge').innerText = buildingAge;
-
-    // 7. Make the results box visible
-    document.getElementById('results').style.display = "block";
-}
-</script>
-
+    <!-- CORE INTERACTION JAVASCRIPT ENGINE -->
+    <script>
+        function openModule(viewId, moduleName, cardElement) {
+            // Hide all views
+            document.querySelectorAll('.panel-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active highlighting from all 4 shortcut cards
+            document.querySelectorAll('.nav-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Activate target view content
+            document.getElementById(viewId).classList.add('active');
+            
+            // Highlight selected card shortcut
+            cardElement.classList.add('active');
+            
+            // Update top layout status badge info
+            document.getElementById('current-module-badge').innerText = "Active: " + moduleName;
+        }
+    </script>
 </body>
 </html>
