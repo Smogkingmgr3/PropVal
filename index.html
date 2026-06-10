@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Mortgage Valuation Tool</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #0284c7;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #cbd5e1;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #475569;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+            background-color: #f8fafc;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+        button {
+            width: 100%;
+            background-color: var(--accent);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0369a1;
+        }
+        .results-container {
+            margin-top: 30px;
+            display: none;
+        }
+        .result-card {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .bg-market {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+        .bg-fsv {
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+        }
+        .result-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .bg-market h3 { color: #166534; }
+        .bg-fsv h3 { color: #9a3412; }
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .bg-market .price { color: #15803d; }
+        .bg-fsv .price { color: #c2410c; }
+        .breakdown {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 10px;
+            text-align: left;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Property Valuation Calculator</h1>
+    <div class="subtitle">Bank Mortgage & Forced Sale Value Appraisal</div>
+    
+    <!-- LAND VALUATION -->
+    <div class="section-title">1. Land Details</div>
+    <div class="grid">
+        <div class="form-group">
+            <label for="landArea">Land Area (Sq. Ft.)</label>
+            <input type="number" id="landArea" value="1500" min="0">
+        </div>
+        <div class="form-group">
+            <label for="landRate">Market Rate (per Sq. Ft.)</label>
+            <input type="number" id="landRate" value="120" min="0">
+        </div>
+    </div>
+
+    <!-- BUILDING VALUATION -->
+    <div class="section-title">2. Building Structure Details</div>
+    <div class="grid">
+        <div class="form-group">
+            <label for="buildArea">Built-up Area (Total Sq. Ft.)</label>
+            <input type="number" id="buildArea" value="2000" min="0">
+        </div>
+        <div class="form-group">
+            <label for="constRate">Current Construction Rate (per Sq. Ft.)</label>
+            <input type="number" id="constRate" value="75" min="0">
+        </div>
+        <div class="form-group">
+            <label for="buildingAge">Age of Building (Years)</label>
+            <input type="number" id="buildingAge" value="10" min="0">
+        </div>
+        <div class="form-group">
+            <label for="depRate">Annual Depreciation Rate (%)</label>
+            <input type="number" id="depRate" value="2" min="0" max="100" step="0.1">
+        </div>
+    </div>
+
+    <!-- BANK MORTGAGE PARAMETERS -->
+    <div class="section-title">3. Mortgage Risk Factor</div>
+    <div class="form-group full-width">
+        <label for="fsvFactor">Forced Sale Value (FSV) Percentage (%)</label>
+        <select id="fsvFactor">
+            <option value="80" selected>80% (Standard Bank Norm)</option>
+            <option value="75">75% (Conservative)</option>
+            <option value="70">70% (High Risk Property)</option>
+            <option value="90">90% (Premium Property)</option>
+        </select>
+    </div>
+
+    <button onclick="calculateMortgageValuation()">Generate Valuation Report</button>
+
+    <!-- REPORT OUTPUT -->
+    <div id="results" class="results-container">
+        <div class="result-card bg-market">
+            <h3>Fair Market Value (FMV)</h3>
+            <div id="fmvPrice" class="price">$0.00</div>
+        </div>
+        
+        <div class="result-card bg-fsv">
+            <h3>Forced Sale Value (FSV)</h3>
+            <div id="fsvPrice" class="price">$0.00</div>
+        </div>
+
+        <div class="breakdown">
+            <strong>Valuation Breakdown:</strong><br>
+            • Total Land Value: <span id="lblLandVal">$0.00</span><br>
+            • Building Replacement Cost (New): <span id="lblBuildNew">$0.00</span><br>
+            • Depreciated Building Value (<span id="lblAge">0</span> yrs): <span id="lblBuildDep">$0.00</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculateMortgageValuation() {
+    // 1. Get Land Inputs
+    const landArea = parseFloat(document.getElementById('landArea').value) || 0;
+    const landRate = parseFloat(document.getElementById('landRate').value) || 0;
+    
+    // 2. Get Building Inputs
+    const buildArea = parseFloat(document.getElementById('buildArea').value) || 0;
+    const constRate = parseFloat(document.getElementById('constRate').value) || 0;
+    const buildingAge = parseFloat(document.getElementById('buildingAge').value) || 0;
+    const depRate = parseFloat(document.getElementById('depRate').value) / 100 || 0;
+    
+    // 3. Get Bank Factor
+    const fsvFactor = parseFloat(document.getElementById('fsvFactor').value) / 100;
+
+    // 4. Mathematical Calculations
+    const totalLandValue = landArea * landRate;
+    
+    const buildingCostNew = buildArea * constRate;
+    // Straight-line Depreciation math: Depreciated Value = Cost * (1 - (Age * Rate))
+    let depreciatedBuildingValue = buildingCostNew * (1 - (buildingAge * depRate));
+    if (depreciatedBuildingValue < 0) depreciatedBuildingValue = 0; // Building value cannot drop below zero
+
+    const fairMarketValue = totalLandValue + depreciatedBuildingValue;
+    const forcedSaleValue = fairMarketValue * fsvFactor;
+
+    // 5. Format Currency Display Function
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+    });
+
+    // 6. Push calculations to the HTML page
+    document.getElementById('fmvPrice').innerText = formatter.format(fairMarketValue);
+    document.getElementById('fsvPrice').innerText = formatter.format(forcedSaleValue);
+    
+    document.getElementById('lblLandVal').innerText = formatter.format(totalLandValue);
+    document.getElementById('lblBuildNew').innerText = formatter.format(buildingCostNew);
+    document.getElementById('lblBuildDep').innerText = formatter.format(depreciatedBuildingValue);
+    document.getElementById('lblAge').innerText = buildingAge;
+
+    // 7. Make the results box visible
+    document.getElementById('results').style.display = "block";
+}
+</script>
+
+</body>
+</html>
